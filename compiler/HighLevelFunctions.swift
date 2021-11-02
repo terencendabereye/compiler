@@ -19,7 +19,7 @@ func decodeLine(_ inputString: String, outputString: inout String, variableDicti
             outputString.append(doCalc(inputString: inputString, variableDictionary: variableDictionary))
         } else if (inputString.hasPrefix("neg ")) {
             outputString.append(doNeg(inputString: inputString, variableDictionary: variableDictionary))
-        } else if (inputString.hasPrefix("jump ")) {
+        } else if (inputString.hasPrefix("goto ")) {
             outputString.append(doJump(inputString: inputString, labelDic: labelDic))
         } else if (inputString.hasPrefix("if ")) {
             outputString.append(doIf(inputString: inputString, labelDic: labelDic, variableDic: variableDictionary))
