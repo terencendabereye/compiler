@@ -380,6 +380,8 @@ func doScan(inputString: String, variableDic: [String: Int]) -> String {
 }
 
 func doNothing(inputString: String) -> String {
+    // this functions adds a specific number of NOOP operations to the output.
+    // the defaault is 1
     var words = getWords(inputString)
     var count: Int = 1
     if (words.count > 1) {
