@@ -30,6 +30,8 @@ func decodeLine(_ inputString: String, outputString: inout String, variableDicti
             outputString.append("\n")
         } else if (inputString.hasPrefix("print ")) {
             outputString.append(doPrint(inputString: inputString, variableDic: variableDictionary))
+        } else if inputString.hasPrefix("wait") {
+            outputString.append(doNothing(inputString: inputString))
         }
         
     }
@@ -375,4 +377,24 @@ func doScan(inputString: String, variableDic: [String: Int]) -> String {
     // scan @(memory_adddress)
     
     return ""
+}
+
+func doNothing(inputString: String) -> String {
+    var words = getWords(inputString)
+    var count: Int = 1
+    if (words.count > 1) {
+        if words[1].hasPrefix("#") {
+            words[1].removeFirst()
+            count = Int(words[1], radix: 16)!
+        } else {
+            count = Int(words[1], radix: 10)!
+        }
+    }
+    
+    var out = ""
+    for _ in 0..<count {
+        out.append("NOOP \n")
+    }
+    
+    return out
 }
