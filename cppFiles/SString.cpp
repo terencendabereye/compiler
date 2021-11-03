@@ -3,21 +3,22 @@
 #include <string.h>
 
 class SString {
+public:
     struct Character {
         char character;
         struct Character *next;
     };
     
-private:
-    char empty;
-    struct Character *nillPtr;
     struct Character *start ;
     struct Character *end;
 
-
-public:
     int count;
 
+    SString() {
+        count = 0;
+        start = (Character *) malloc(sizeof(Character));
+        end = start;
+    }
     
     SString(char *initString) {
         count = 0;
@@ -119,15 +120,72 @@ public:
         }
         return true;
     }
+    
+    struct Character *firstPtrOf(const char testChar) {
+        struct Character *currentPtr = start;
+        while (currentPtr != end) {
+            if (currentPtr->character == testChar) {
+                return currentPtr;
+            }
+            currentPtr = currentPtr->next;
+        }
+        return NULL;
+    }
+    
+    char *getSubString(struct Character *from, struct Character *to) {
+        SString temp;
+        while (from != to) {
+            temp.append(from->character);
+            from = from->next;
+        }
+        return temp.description();
+    }
+    char *getSubString(struct Character *from) {
+        SString temp;
+        temp.append(from->character);
+        return temp.description();
+    }
+    bool contains(const char checkChar) {
+        struct Character *currentPtr = start;
+        while (currentPtr != end) {
+            if(currentPtr->character == checkChar) {
+                return true;
+            } else {
+                currentPtr = currentPtr->next;
+            }
+        }
+        return false;
+    }
+    bool contains(const char *checkStr) {
+        int index = 0;
+        int streak = 0;
+        int checkStrLength = 0;
+        struct Character *temp = start;
+
+        SString checkStrSuper = checkStr;
+        checkStrLength = checkStrSuper.count;
+        
+        while ((temp != end) && (streak < checkStrLength)) {
+            if (checkStr[streak] == temp->character) {
+                streak++;
+            } else {
+                streak *= 0;
+            }
+            temp = temp->next;
+        }
+
+        
+        if (streak == checkStrLength) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 };
 
 
 int main(void) {
-    SString name = "Terence";
-    name.append(" Ndabereye");
-    if (name.hasPrefix("Terence")) {
-        name.print();
-    }
-
+    SString name = "Terence Ndabereye";
+    printf("%d", name.contains("e N"));
     return 0;
 }
