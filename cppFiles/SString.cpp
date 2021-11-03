@@ -14,27 +14,50 @@ private:
     struct Character *end;
 public:
     int count;
-    SString() {
-        nillPtr = (Character *)malloc(sizeof(Character));
-        start = nillPtr;
-        end = nillPtr;
-        empty = '9';
-        count = 0;
-    }
     
     SString(char *initString) {
-        SString();
+        nillPtr = (Character *)malloc(sizeof(Character));
+        //start = nillPtr;
+        //end = nillPtr;
+        count = 0;
+        
         int index = 0;
-        while (initString[count] != '\0') {
+        while (initString[index] != '\0') {
             if (count == 0) {
                 start = makeNewCharPtr(initString[index]);
                 end = start;
+            } else if (count == 1) {
+                start->next = makeNewCharPtr(initString[index]);
+                end = start->next;
             } else {
                 end->next = makeNewCharPtr(initString[index]);
                 end = end->next;
             }
             index++;
-            count++;
+            count = index;
+        }
+    }
+
+    SString(const char *initString) {
+        nillPtr = (Character *)malloc(sizeof(Character));
+        //start = nillPtr;
+        //end = nillPtr;
+        count = 0;
+        
+        int index = 0;
+        while (initString[index] != '\0') {
+            if (count == 0) {
+                start = makeNewCharPtr(initString[index]);
+                end = start;
+            } else if (count == 1) {
+                start->next = makeNewCharPtr(initString[index]);
+                end = start->next;
+            } else {
+                end->next = makeNewCharPtr(initString[index]);
+                end = end->next;
+            }
+            index++;
+            count = index;
         }
     }
 
@@ -60,6 +83,6 @@ public:
 
 int main(void) {
     char name1[] = "Terence";
-    SString name = SString(name1);
-
+    SString name = SString("Ndabereye");
+    name.print();
 }
