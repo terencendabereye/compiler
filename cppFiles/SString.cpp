@@ -140,10 +140,10 @@ public:
         }
         return temp.description();
     }
-    char *getSubString(struct Character *from) {
+    char getChar(struct Character *from) {
         SString temp;
         temp.append(from->character);
-        return temp.description();
+        return temp.start->character;
     }
     bool contains(const char checkChar) {
         struct Character *currentPtr = start;
@@ -173,19 +173,50 @@ public:
             }
             temp = temp->next;
         }
-
-        
         if (streak == checkStrLength) {
             return true;
         } else {
             return false;
         }
     }
+
+    struct Character *before(struct Character *checkCha) {
+        struct Character *current = start;
+        struct Character *before = start;
+        while (current != checkCha) {
+            before = current;
+            current = current->next;
+        }
+        return before;
+    }
+    struct Character *after(struct Character *checkCha) {
+        if (checkCha == end) {
+            return end;
+        }
+        struct Character *current = start;
+        struct Character *after = current->next;
+        while (current != checkCha) {
+            current = current->next;
+            after = current->next;
+        }
+        return after;
+    }
+    struct Character *index(int index) {
+        struct Character *current = start;
+        int position = 0;
+        while ((current != end) && (position != index)) {
+            position++;
+            current = current->next;
+        }
+        return current;
+    }
 };
 
 
 int main(void) {
     SString name = "Terence Ndabereye";
-    printf("%d", name.contains("e N"));
+    for (int i=0; i<name.count; i++) {
+        printf("%c", name.getChar(name.index(i)));
+    }
     return 0;
 }
