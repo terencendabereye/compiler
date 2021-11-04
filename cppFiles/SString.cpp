@@ -14,13 +14,45 @@ public:
 
     int count;
 
-    SString() {
+    SString();    
+    SString(char *initString);
+    SString(const char *initString);
+    ~SString();
+    void print();    
+    void append(const char *addedString);
+    void append(const char addedChar);
+    char *description();    
+    bool hasPrefix(const char prefix);
+    bool hasPrefix(const char *prefix);    
+    struct Character *firstPtrOf(const char testChar);    
+    char *getSubString(struct Character *from, struct Character *to);
+    char getChar(struct Character *from);
+    bool contains(const char checkChar);
+    bool contains(const char *checkStr);
+    struct Character *before(struct Character *checkCha);
+    struct Character *after(struct Character *checkCha);
+    struct Character *index(int index);
+    void remove(struct Character *toRemove);
+    void removeFirst();
+    void removeFirst(const int number);
+    void removeLast();
+    void removeLast(const int number);
+};
+
+
+int main(void) {
+    SString name = "abcdefghijklmnopqrstuvwxyz";
+    name.removeLast();
+    printf("%s", name.description());
+    return 0;
+}
+
+SString::SString() {
         count = 0;
         start = (Character *) malloc(sizeof(Character));
         end = start;
     }
-    
-    SString(char *initString) {
+SString::SString(char *initString) {
         count = 0;
         
         while (initString[count] != '\0') {
@@ -38,8 +70,7 @@ public:
             count++;
         }
     }
-
-    SString(const char *initString) {
+SString::SString(const char *initString) {
         count = 0;
         
         while (initString[count] != '\0') {
@@ -57,24 +88,20 @@ public:
             count++;
         }
     }
-
-    struct Character *makeNewCharPtr(char newChar ){
-        struct Character *ptr = (Character *)malloc(sizeof(Character));
-        ptr->next = (Character *)malloc(sizeof(Character));
-        ptr->character = newChar;
-        ptr->next->character = '\0';
-        return ptr;
+SString::~SString() {
+        while (start != end) {
+            removeFirst();
+        }
+        removeFirst();
     }
-
-    void print() {
+void SString::print() {
         struct Character *currentPtr = start;
         while (currentPtr != end) {
             printf("%c", currentPtr->character);
             currentPtr = currentPtr->next;
         }
     }
-    
-    void append(const char *addedString) {
+void SString::append(const char *addedString) {
         int index = 0;
         while (addedString[index] != '\0') {
             end->character = addedString[index];
@@ -84,14 +111,13 @@ public:
             count ++;
         }
     }
-    void append(const char addedChar) {
+void SString::append(const char addedChar) {
         end->character = addedChar;
         end->next = (Character *) malloc(sizeof(Character));
         end = end->next;
         count++;
     }
-
-    char *description() {
+char *SString::description() {
         char *out = (char *)malloc(count * sizeof(char));
         struct Character *currentPtr = start;
         for (int i=0; i<count; i++) {
@@ -100,15 +126,14 @@ public:
         }
         return out;
     }
-    
-    bool hasPrefix(const char prefix) {
+bool SString::hasPrefix(const char prefix) {
         if (start->character == prefix) {
             return true;
         } else {
             return false;
         }
     }
-    bool hasPrefix(const char *prefix) {
+bool SString::hasPrefix(const char *prefix) {
         int index = 0;
         struct Character *currentPtr = start;
         while (prefix[index] != '\0') {
@@ -120,8 +145,7 @@ public:
         }
         return true;
     }
-    
-    struct Character *firstPtrOf(const char testChar) {
+SString:: Character *SString::firstPtrOf(const char testChar) {
         struct Character *currentPtr = start;
         while (currentPtr != end) {
             if (currentPtr->character == testChar) {
@@ -131,8 +155,7 @@ public:
         }
         return NULL;
     }
-    
-    char *getSubString(struct Character *from, struct Character *to) {
+char *SString::getSubString(struct Character *from, struct Character *to) {
         SString temp;
         while (from != to) {
             temp.append(from->character);
@@ -140,12 +163,12 @@ public:
         }
         return temp.description();
     }
-    char getChar(struct Character *from) {
+char SString::getChar(struct Character *from) {
         SString temp;
         temp.append(from->character);
         return temp.start->character;
     }
-    bool contains(const char checkChar) {
+bool SString::contains(const char checkChar) {
         struct Character *currentPtr = start;
         while (currentPtr != end) {
             if(currentPtr->character == checkChar) {
@@ -156,7 +179,7 @@ public:
         }
         return false;
     }
-    bool contains(const char *checkStr) {
+bool SString::contains(const char *checkStr) {
         int index = 0;
         int streak = 0;
         int checkStrLength = 0;
@@ -179,8 +202,7 @@ public:
             return false;
         }
     }
-
-    struct Character *before(struct Character *checkCha) {
+SString:: Character *SString::before(struct Character *checkCha) {
         struct Character *current = start;
         struct Character *before = start;
         while (current != checkCha) {
@@ -189,7 +211,7 @@ public:
         }
         return before;
     }
-    struct Character *after(struct Character *checkCha) {
+SString:: Character *SString::after(struct Character *checkCha) {
         if (checkCha == end) {
             return end;
         }
@@ -201,7 +223,7 @@ public:
         }
         return after;
     }
-    struct Character *index(int index) {
+SString:: Character *SString::index(int index) {
         struct Character *current = start;
         int position = 0;
         while ((current != end) && (position != index)) {
@@ -210,13 +232,35 @@ public:
         }
         return current;
     }
-};
-
-
-int main(void) {
-    SString name = "Terence Ndabereye";
-    for (int i=0; i<name.count; i++) {
-        printf("%c", name.getChar(name.index(i)));
+void SString::remove(struct Character *toRemove) {
+        if (toRemove == start) {
+            removeFirst();
+        } else if (toRemove == end) {
+            removeLast();
+        } else {
+            struct Character *before = SString::before(toRemove);
+            struct Character *after = SString::after(toRemove);
+            before->next = after;
+            free(toRemove);
+        }
+        count--;
     }
-    return 0;
-}
+void SString::removeFirst() {
+        struct Character *temp = start;
+        start = after(start);
+        free(temp);
+        count--;
+    }
+void SString::removeFirst(const int number) {
+        for (int i=0; i<number; i++) {
+            removeFirst();
+        }
+    }
+void SString::removeLast() {
+        remove(before(end));
+    }
+void SString::removeLast(const int number) {
+        for (int i=0; i<number; i++) {
+            removeLast();
+        }
+    }
