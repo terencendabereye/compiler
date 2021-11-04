@@ -1,51 +1,12 @@
+#include "SString.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-
-class SString {
-public:
-    struct Character {
-        char character;
-        struct Character *next;
-    };
-    
-    struct Character *start ;
-    struct Character *end;
-
-    int count;
-
-    SString();    
-    SString(char *initString);
-    SString(const char *initString);
-    ~SString();
-    void print();    
-    void append(const char *addedString);
-    void append(const char addedChar);
-    char *description();    
-    bool hasPrefix(const char prefix);
-    bool hasPrefix(const char *prefix);    
-    struct Character *firstPtrOf(const char testChar);    
-    char *getSubString(struct Character *from, struct Character *to);
-    char getChar(struct Character *from);
-    bool contains(const char checkChar);
-    bool contains(const char *checkStr);
-    struct Character *before(struct Character *checkCha);
-    struct Character *after(struct Character *checkCha);
-    struct Character *index(int index);
-    void remove(struct Character *toRemove);
-    void removeFirst();
-    void removeFirst(const int number);
-    void removeLast();
-    void removeLast(const int number);
-};
+#include <stdlib.h>
 
 
-int main(void) {
-    SString name = "abcdefghijklmnopqrstuvwxyz";
-    name.removeLast();
-    printf("%s", name.description());
-    return 0;
-}
+
+
+
 
 SString::SString() {
         count = 0;
