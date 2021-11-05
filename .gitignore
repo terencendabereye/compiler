@@ -90,6 +90,4 @@ fastlane/test_output
 iOSInjectionProject/
 
 main
-tasks.json
-launch.json
-
+a.out
