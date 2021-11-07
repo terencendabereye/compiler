@@ -41,3 +41,4 @@ compile(sourceCode: inputString, machineCode: &outputString)
 outputString.insert(contentsOf: "v2.0 raw\n", at: outputString.startIndex)
 
 try! outputString.write(to: output, atomically: true, encoding: .ascii)
+

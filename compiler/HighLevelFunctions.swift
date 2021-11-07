@@ -400,3 +400,93 @@ func doNothing(inputString: String) -> String {
     
     return out
 }
+
+func removeSpaces(input: String) -> String {
+    var out: String = ""
+    out = input
+    while (out.contains(" ")) {
+        out.remove(at: out.firstIndex(of: " ")!)
+    }
+    
+    return out
+}
+
+func doCalculation(input: String) -> [String] {
+    func doCalculationsInternal(out: inout [String], temp: inout String, x: inout String, y: inout String, level: inout Int, alphabet: [Character]) {
+        while(!temp.isEmpty) {
+            if (temp.contains("(")) {
+                var subString = String(temp[temp.firstIndex(of: "(")!...temp.firstIndex(of: ")")!])
+                //var inBrackets: String = ""
+                
+                subString.removeFirst()
+                subString.removeLast()
+                
+                doCalculationsInternal(out: &out, temp: &subString, x: &x, y: &y, level: &level, alphabet: alphabet)
+                
+                temp.replaceSubrange(temp.firstIndex(of: "(")!...temp.firstIndex(of: ")")!, with: CollectionOfOne(alphabet[level-1]))
+                //level += 1
+                
+            } else if (temp.contains("*")) {
+                let operation: Character = "*"
+                x = String(temp.remove(at: temp.index(before: temp.firstIndex(of: operation)!)))
+                y = String(temp.remove(at: temp.index(after: temp.firstIndex(of: operation)!)))
+                
+                out.append("\(alphabet[level]) = \(x) \(operation) \(y)")
+                
+                temp.insert(contentsOf: CollectionOfOne(alphabet[level]), at: temp.firstIndex(of: operation)!)
+                temp.remove(at: temp.firstIndex(of: operation)!)
+                level += 1
+                
+            } else if (temp.contains("/")) {
+                let operation: Character = "/"
+                x = String(temp.remove(at: temp.index(before: temp.firstIndex(of: operation)!)))
+                y = String(temp.remove(at: temp.index(after: temp.firstIndex(of: operation)!)))
+                
+                out.append("\(alphabet[level]) = \(x) \(operation) \(y)")
+                
+                //temp.replaceSubrange(temp.firstIndex(of: operation), with: CollectionOfOne(alphabet[level]))
+                temp.insert(contentsOf: CollectionOfOne(alphabet[level]), at: temp.firstIndex(of: operation)!)
+                temp.remove(at: temp.firstIndex(of: operation)!)
+                level += 1
+                
+            } else if (temp.contains("+")) {
+                let operation: Character = "+"
+                x = String(temp.remove(at: temp.index(before: temp.firstIndex(of: operation)!)))
+                y = String(temp.remove(at: temp.index(after: temp.firstIndex(of: operation)!)))
+                
+                out.append("\(alphabet[level]) = \(x) \(operation) \(y)")
+                
+                temp.insert(contentsOf: CollectionOfOne(alphabet[level]), at: temp.firstIndex(of: operation)!)
+                temp.remove(at: temp.firstIndex(of: operation)!)
+                level += 1
+            } else if (temp.contains("-")) {
+                let operation: Character = "-"
+                x = String(temp.remove(at: temp.index(before: temp.firstIndex(of: operation)!)))
+                y = String(temp.remove(at: temp.index(after: temp.firstIndex(of: operation)!)))
+                
+                out.append("\(alphabet[level]) = \(x) \(operation) \(y)")
+                
+                temp.insert(contentsOf: CollectionOfOne(alphabet[level]), at: temp.firstIndex(of: operation)!)
+                temp.remove(at: temp.firstIndex(of: operation)!)
+                level += 1
+            } else {
+                
+                temp.removeAll()
+            }
+            
+            
+        }
+    }
+    var out: [String] = []
+    var temp = input
+    var x: String = ""
+    var y: String = ""
+    var level: Int = 0
+    let alphabet: [Character] = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+    temp = removeSpaces(input: temp)
+    
+    doCalculationsInternal(out: &out, temp: &temp, x: &x, y: &y, level: &level, alphabet: alphabet)
+    out.append("ans = \(alphabet[level-1])")
+    return out
+    
+}
